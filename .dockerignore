@@ -1,0 +1,10 @@
+**
+!Dockerfile
+!requirements.txt
+!app.py
+!rag.py
+!assistants.py
+!runtime_config.py
+!ai_client.py
+!.streamlit/
+!.streamlit/config.toml

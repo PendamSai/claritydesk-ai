@@ -1,0 +1,45 @@
+services:
+  app:
+    build: .
+    ports:
+      - "127.0.0.1:8501:8501"
+    environment:
+      PUBLIC_DEPLOYMENT: "true"
+      OLLAMA_BASE_URL: http://ollama:11434
+      CHAT_MODEL: llama3.2
+      EMBEDDING_MODEL: nomic-embed-text
+    volumes:
+      - speech-models:/home/app/.cache/huggingface
+    depends_on:
+      model-setup:
+        condition: service_completed_successfully
+    restart: unless-stopped
+  ollama:
+    image: ollama/ollama:latest
+    environment:
+      OLLAMA_HOST: 0.0.0.0:11434
+      OLLAMA_NUM_PARALLEL: "1"
+      OLLAMA_MAX_LOADED_MODELS: "1"
+    volumes:
+      - ollama-models:/root/.ollama
+    restart: unless-stopped
+  model-setup:
+    image: ollama/ollama:latest
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - |
+        attempts=0
+        until ollama list >/dev/null 2>&1; do
+          attempts=$$((attempts + 1))
+          if [ "$$attempts" -ge 60 ]; then exit 1; fi
+          sleep 2
+        done
+        ollama pull llama3.2 && ollama pull nomic-embed-text
+    depends_on:
+      - ollama
+volumes:
+  speech-models:
+  ollama-models:

@@ -1,0 +1,9 @@
+Introducing ClarityDesk AI ? one local workspace for document Q&A, meeting notes, and research.
+
+PDFs ? Answers with page citations
+Recordings ? Summaries and action items
+Research questions ? Follow-up searches and cited reports
+
+Built with Python, Streamlit, Ollama, and LangChain. Designed to make information easier to understand and use.
+
+#GenerativeAI #RAG #AgenticAI #Python #Ollama
